@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phonebook</title>
+  </head>
+  <body>
+    <button id="load">Load Phonebook</button>
+    <button id="add-phone">Add phone</button>
+  </body>
+
+  <script>
+    const phonebookUrl = "http://localhost:3030/jsonstore/phonebook";
+
+    const loadBtn = document.getElementById("load");
+    loadBtn.addEventListener("click", async () => {
+      /** Async Variant */
+      try {
+        const response = await fetch(phonebookUrl);
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+
+      /** Promise */
+      // fetch(phonebookUrl)
+      //   .then((response) => response.json())
+      //   .then((result) => console.log(result))
+      //   .catch((err) => console.log(err));
+    });
+
+    const addBtn = document.getElementById("add-phone");
+
+    const person = "Mariika";
+    const phone = "+359-213-123-123";
+    addBtn.addEventListener("click", () => {
+      fetch(phonebookUrl, {
+        method: "POST",
+        body: JSON.stringify({ person, phone }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
+    });
+  </script>
+</html>
