@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remote Data</title>
+  </head>
+  <body>
+    <button id="load-msgs">Get Messages</button>
+    <div><textarea id="chat" cols="50" rows="5"></textarea></div>
+
+    <div>
+      <label for="message">Message</label>
+      <input type="text" id="message" />
+    </div>
+    <div>
+      <label for="author">Author</label>
+      <input type="text" id="author" />
+    </div>
+    <button id="send-msg">Send</button>
+
+    <script>
+      const baseUrl = "http://localhost:3030/jsonstore/messenger";
+
+      // Register all click events
+      const loadBtn = document.getElementById("load-msgs");
+      loadBtn.addEventListener("click", getMessages);
+
+      const sendMsgBtn = document.getElementById("send-msg");
+      sendMsgBtn.addEventListener("click", sendMessage);
+
+      // Callbacks
+      function getMessages(e) {
+        const chatArea = document.getElementById("chat");
+
+        fetch(baseUrl)
+          .then((res) => res.json())
+          .then((data) => {
+            const messages = Object.values(data)
+              .map((msg) => `${msg.author}: ${msg.content}`)
+              .join("\n");
+
+            chatArea.textContent = messages;
+          })
+          .catch((error) => {
+            console.error(`Error: ${error}`);
+          });
+      }
+
+      function sendMessage(e) {
+        const messageInputEl = document.getElementById("message");
+        const authorInputEl = document.getElementById("author");
+
+        const messageValue = messageInputEl.value;
+        const authorValue = authorInputEl.value;
+
+        fetch(baseUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ author: authorValue, content: messageValue }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => console.error(err.message));
+      }
+    </script>
+  </body>
+</html>

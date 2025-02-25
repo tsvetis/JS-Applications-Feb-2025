@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Handling</title>
+  </head>
+  <body>
+    <form action="/login" method="POST" id="login-form">
+      <div>
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" />
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" />
+      </div>
+
+      <div><input type="submit" value="Login" /></div>
+    </form>
+
+    <script>
+      const formEl = document.getElementById("login-form");
+
+      formEl.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        console.log(formData.get("username"));
+        console.log(formData.get("password"));
+
+        const data = Object.fromEntries(formData);
+        console.log({ data });
+      });
+    </script>
+  </body>
+</html>
