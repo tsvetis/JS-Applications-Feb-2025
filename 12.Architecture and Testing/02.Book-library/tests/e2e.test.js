@@ -54,19 +54,90 @@ describe("E2E tests", function () {
   // Test proper
   describe("Book Library", () => {
     it("Load Books", async () => {
-      //TODO
+      // Mock Request and Response
+      const data = mockData.catalog;
+      const { get } = await handle(endpoints.catalog);
+      get(data);
+
+      // Page navigation
+      await page.goto(host);
+      await page.waitForSelector("#loadBooks");
+      await page.click("#loadBooks");
+
+      // Compare
+      const books = await page.$$eval("tbody tr", (t) => {
+        return t.map((s) => s.textContent);
+      });
+      expect(books.length).to.equal(data.length);
     });
 
     it("Check books info", async () => {
-      //TODO
+      // Mock Request and Response
+      const data = mockData.catalog;
+      const { get } = await handle(endpoints.catalog);
+      get(data);
+
+      // Page Navigate
+      await page.goto(host);
+      await page.waitForSelector("#loadBooks");
+      await page.click("#loadBooks");
+
+      const books = await page.$$eval("tbody tr td", (t) => {
+        return t.map((s) => s.textContent);
+      });
+
+      expect(books[0]).to.equal(data[0].title);
+      expect(books[1]).to.equal(data[0].author);
     });
 
     it("Create Book", async () => {
-      //TODO
+      // Mock data
+      const [data] = mockData.catalog;
+
+      const { post } = await handle(endpoints.catalog);
+      const { onRequest } = post();
+
+      // Page Navigate
+      await page.goto(host);
+      await page.fill('input[name="title"]', data.title);
+      await page.fill('input[name="author"]', data.author);
+
+      const [request] = await Promise.all([
+        onRequest(),
+        page.click('text="Submit"'),
+      ]);
+
+      const postData = JSON.parse(request.postData());
+
+      expect(postData.title).to.equal(data.title);
+      expect(postData.author).to.equal(data.author);
     });
 
     it("Edit should populate form with correct data", async () => {
-      //TODO
+      // Mock Data
+      const info = mockData.catalog;
+      const [data] = mockData.catalog;
+
+      // Mock Get All
+      const { get } = await handle(endpoints.catalog);
+      get(info);
+
+      await page.goto(host);
+      await page.click("#loadBooks");
+
+      // Mock Get All
+      const { get2 } = await handle(endpoints.details(data._id));
+      get2(data);
+
+      await page.click(`tr:has-text("${data.title}") >> text=Edit`);
+      await page.waitForSelector("form");
+
+      const [bookStr, authorStr] = await page.$$eval("form input", (t) => {
+        return t.map((i) => i.value);
+      });
+
+      expect(bookStr).to.equal(data.title);
+      expect(authorStr).to.equal(data.author);
     });
   });
 });
