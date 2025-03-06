@@ -50,11 +50,46 @@ describe("E2E tests", function () {
   // Test proper
   describe("Messenger Info", () => {
     it("Load Message", async () => {
-      //TODO
+      // Mock Get Request and Response
+      const data = mockData.list;
+      const { get } = await handle(endpoints.list);
+      get(data);
+
+      // Page Navigation
+      await page.goto(host);
+      await page.waitForSelector("#refresh");
+      await page.click("input[value='Refresh']");
+
+      const [post] = await page.$$eval("textarea", (t) =>
+        t.map((r) => r.value)
+      );
+
+      const [firstMsg, secondMsg] = data;
+      expect(post).to.equal(
+        `${firstMsg.author}: ${firstMsg.content}\n${secondMsg.author}: ${secondMsg.content}`
+      );
     });
 
     it("Send Message API call", async () => {
-      //TODO
+      const [data] = mockData.list;
+
+      await page.goto(host);
+
+      const { post } = await handle(endpoints.list);
+      const { onRequest } = post();
+
+      await page.waitForSelector("#submit");
+      await page.fill('input[name="author"]', data.author);
+      await page.fill('input[name="content"]', data.content);
+
+      const [request] = await Promise.all([
+        onRequest(),
+        page.click('input[value="Send"]'),
+      ]);
+
+      const postData = JSON.parse(request.postData());
+      expect(postData.author).to.equal("Spami");
+      expect(postData.content).to.equal("Hello, are you there?");
     });
   });
 });
