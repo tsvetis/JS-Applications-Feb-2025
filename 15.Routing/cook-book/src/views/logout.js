@@ -1,4 +1,5 @@
 import { renderNavigation } from "../utils/navigation.js";
+import page from "//unpkg.com/page/page.mjs";
 
 const baseUrl = "http://localhost:3030/users/logout";
 
@@ -11,7 +12,7 @@ export default function logoutPage() {
   })
     .then(() => {
       localStorage.clear();
-      location.href = "/cook-book/index.html";
+      page.redirect("/");
 
       renderNavigation();
     })
