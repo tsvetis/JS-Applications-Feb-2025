@@ -1,0 +1,20 @@
+{
+  "name": "cook-book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "lite-server --baseDir=src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit-html": "^3.2.1",
+    "page": "^1.11.6"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
