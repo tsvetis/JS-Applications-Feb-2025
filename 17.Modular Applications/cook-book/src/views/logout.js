@@ -1,20 +1,9 @@
-import { renderNavigation } from "../utils/navigation.js";
 import page from "//unpkg.com/page/page.mjs";
+import auth from "../api/auth.js";
 
-const baseUrl = "http://localhost:3030/users/logout";
-
-export default function logoutPage() {
-  const token = localStorage.getItem("accessToken");
-  console.log({ token });
-
-  fetch(baseUrl, {
-    "X-Authorization": token,
-  })
-    .then(() => {
-      localStorage.clear();
-      page.redirect("/");
-
-      renderNavigation();
-    })
-    .catch((err) => console.error(err.message));
+export default function logoutPage(ctx) {
+  auth.logout().finally(() => {
+    localStorage.clear();
+    page.redirect("/");
+  });
 }

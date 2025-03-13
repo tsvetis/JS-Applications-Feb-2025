@@ -1,32 +1,61 @@
-// import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import { html, render } from "https://unpkg.com/lit-html";
 import page from "//unpkg.com/page/page.mjs";
-
-const baseUrl = "http://localhost:3030/data/recipes";
+import recipes from "../api/recipes.js";
 
 const mainEl = document.querySelector("main");
 
-export default async function homePage() {
-  const recipes = await getRecipes();
-  render(allRecipesTemplate(recipes), mainEl);
+function searchSubmitHandler(e) {
+  e.preventDefault();
+
+  const formData = new FormData(e.currentTarget);
+  const search = formData.get("search");
+
+  page.redirect(`/?search=${search}`);
 }
 
-async function getRecipes() {
-  const res = await fetch(baseUrl);
-  const data = await res.json();
+export default async function homePage(ctx) {
+  const searchParams = new URLSearchParams(ctx.querystring);
 
-  return data;
+  const filter = {
+    search: searchParams.get("search"),
+  };
+
+  // TODO: split loading indicator from search and list
+  render(allRecipesTemplate(recipes, true, searchSubmitHandler), mainEl);
+
+  recipes
+    .getAll(filter)
+    .then((recipes) => {
+      render(allRecipesTemplate(recipes, false, searchSubmitHandler), mainEl);
+    })
+    .catch((err) => alert(err.message));
 }
 
-function allRecipesTemplate(recipes) {
+function allRecipesTemplate(recipes = [], isLoading = false, onSearch) {
   const recipeDetailsHandler = (recipeId) => {
     page.redirect(`/details/${recipeId}`);
   };
 
   return html`
-    ${recipes.map((recipe) =>
-      singleRecipeTemplate(recipe, recipeDetailsHandler)
-    )}
+    ${isLoading
+      ? html`<div id="wrapper">
+          <span class="loader"></span>
+        </div>`
+      : html`
+          <form
+            @submit=${onSearch}
+            style="display:flex; justify-content:center;"
+          >
+            <div>
+              <input type="text" name="search" style="position:unset;" />
+              <input type="submit" value="Search" style="display: inline;" />
+            </div>
+          </form>
+
+          ${recipes.map((recipe) =>
+            singleRecipeTemplate(recipe, recipeDetailsHandler)
+          )}
+        `}
   `;
 }
 

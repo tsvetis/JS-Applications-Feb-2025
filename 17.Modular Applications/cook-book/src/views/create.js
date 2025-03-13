@@ -1,7 +1,6 @@
-import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "https://unpkg.com/lit-html";
 import page from "//unpkg.com/page/page.mjs";
-
-const baseUrl = `http://localhost:3030/data/recipes`;
+import recipes from "../api/recipes.js";
 
 const mainEl = document.querySelector("main");
 
@@ -14,7 +13,7 @@ function createTemplate() {
     <section class="view-section" id="create-section">
       <article>
         <h2>New Recipe</h2>
-        <form @submit=${createRecipe}>
+        <form @submit=${createRecipeHandler}>
           <label
             >Name: <input type="text" name="name" placeholder="Recipe name"
           /></label>
@@ -42,27 +41,16 @@ function createTemplate() {
   `;
 }
 
-function createRecipe(e) {
+function createRecipeHandler(e) {
   e.preventDefault();
 
-  const formData = new FormData(e.currentTarget);
-  const data = Object.fromEntries(formData);
-
+  const data = Object.fromEntries(new FormData(e.currentTarget));
   data.ingredients = data.ingredients.split("\n");
   data.steps = data.steps.split("\n");
 
-  const accessToken = localStorage.getItem("accessToken");
-
-  fetch(baseUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Authorization": accessToken,
-    },
-    body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .then((data) => {
+  recipes
+    .create(data)
+    .then(() => {
       page.redirect("/");
     })
     .catch((err) => console.error(err.message));

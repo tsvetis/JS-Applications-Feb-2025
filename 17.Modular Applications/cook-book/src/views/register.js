@@ -1,15 +1,14 @@
-import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "https://unpkg.com/lit-html";
 import page from "//unpkg.com/page/page.mjs";
-
-const baseUrl = `http://localhost:3030/users`;
+import auth from "../api/auth.js";
 
 const mainEl = document.querySelector("main");
 
 export default function registerPage() {
-  render(registerTemplate(), mainEl);
+  render(template(), mainEl);
 }
 
-function registerTemplate() {
+function template() {
   return html`
     <section class="view-section" id="register-section">
       <article>
@@ -28,25 +27,12 @@ function registerTemplate() {
 function registerUser(e) {
   e.preventDefault();
 
-  const formData = new FormData(e.currentTarget);
+  const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
 
-  fetch(`${baseUrl}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: formData.get("email"),
-      password: formData.get("password"),
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("_id", data._id);
-
+  auth
+    .register(email, password)
+    .then(() => {
       page.redirect("/");
     })
-    .catch((err) => console.error(err.message));
+    .catch((err) => alert(err.message));
 }

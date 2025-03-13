@@ -1,20 +1,19 @@
-import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "https://unpkg.com/lit-html";
 import page from "//unpkg.com/page/page.mjs";
-
-const baseUrl = `http://localhost:3030/users`;
+import auth from "../api/auth.js";
 
 const mainEl = document.querySelector("main");
 
 export default function loginPage() {
-  render(loginTemplate(), mainEl);
+  render(template(), mainEl);
 }
 
-function loginTemplate() {
+function template() {
   return html`
     <section class="view-section" id="login-section">
       <article>
         <h2>Login</h2>
-        <form @submit=${loginUser}>
+        <form @submit=${loginSubmitHandler}>
           <label>E-mail: <input type="text" name="email" /></label>
           <label>Password: <input type="password" name="password" /></label>
           <input type="submit" value="Login" />
@@ -24,33 +23,15 @@ function loginTemplate() {
   `;
 }
 
-function loginUser(e) {
+function loginSubmitHandler(e) {
   e.preventDefault();
 
-  const formData = new FormData(e.currentTarget);
-  const { email, password } = Object.fromEntries(formData);
+  const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
 
-  fetch(`${baseUrl}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.code >= 400) {
-        return alert(data.message);
-      }
-
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("email", data.email);
-      localStorage.setItem("_id", data._id);
-
+  auth
+    .login(email, password)
+    .then(() => {
       page.redirect("/");
     })
-    .catch((err) => console.error(err.message));
+    .catch((err) => alert(err.message));
 }

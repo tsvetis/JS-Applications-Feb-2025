@@ -1,18 +1,11 @@
-import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "https://unpkg.com/lit-html";
+import recipes from "../api/recipes.js";
+
 const mainEl = document.querySelector("main");
-
-const baseUrl = "http://localhost:3030/data/recipes";
-
-async function getRecipeDetails(id) {
-  const res = await fetch(`${baseUrl}/${id}`);
-  const data = await res.json();
-
-  return data;
-}
 
 export default async function detailsPage(ctx) {
   const { recipeId } = ctx.params;
-  const recipe = await getRecipeDetails(recipeId);
+  const recipe = await recipes.getOne(recipeId);
 
   const userId = localStorage.getItem("_id");
   const isOwner = recipe._ownerId === userId;
