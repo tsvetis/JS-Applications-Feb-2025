@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <title>Tattoo Masters</title>
+    <script type="module" src="/src/app.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <header>
+        <!-- Navigation -->
+        <a id="logo" href="/"
+          ><img id="logo-img" src="/images/logo.png" alt="logo" />
+        </a>
+        <nav>
+          <a href="/catalog">Collection</a>
+
+          <!-- Logged-in users -->
+          <div class="user">
+            <a href="/create">Add Tattoo</a>
+            <a id="logout" href="javascript:void(0)">Logout</a>
+          </div>
+
+          <!-- Guest users -->
+          <div class="guest">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+          </div>
+        </nav>
+      </header>
+      <main>
+        <!-- Home page -->
+
+        <!-- <section id="home">
+          <div id="home-wrapper">
+            <p id="home-intro">
+              Whether you're a seasoned artist, a collector of ink, or someone
+              looking for inspiration for their first tattoo,
+              <span>Tattoo Masters</span> is your community. Share your
+              masterpieces, discover incredible designs, and connect with
+              artists and aficionados from around the world.
+            </p>
+            <a href="#" id='join-us'>Join Us!</a>
+          </div>
+        </section> -->
+
+        <!-- Dashboard page -->
+        <!-- <h2>Collection</h2>
+        <section id="tattoos">
+          <div class="tattoo">
+            <img src="./images/mad bunny.png" alt="example1" />
+            <div class="tattoo-info">
+              <h3 class="type">The Mad Bunny</h3>
+              <span>Uploaded by </span>
+              <p class="user-type">Tattoo Artist</p>
+              <a class="details-btn" href="#">Learn More</a>
+            </div>
+          </div>
+          <div class="tattoo">
+            <img src="./images/japanese dragon.png" alt="example2" />
+            <div class="tattoo-info">
+              <h3 class="type">Japanese Dragon</h3>
+              <span>Uploaded by </span>
+              <p class="user-type">Tattoo Enthusiast</p>
+              <a class="details-btn" href="#">Learn More</a>
+            </div>
+          </div>
+          <div class="tattoo">
+            <img src="./images/trash polka.png" alt="example3" />
+            <div class="tattoo-info">
+              <h3 class="type">Trash Polka</h3>
+              <span>Uploaded by </span>
+              <p class="user-type">First Time in Tattoo</p>
+              <a class="details-btn" href="#">Learn More</a>
+            </div>
+          </div>
+        </section>
+        <h2 id="no-tattoo">Collection is empty, be the first to contribute</h2> -->
+
+        <!-- Register Page (Only for Guest users) -->
+        <!-- <section id="register">
+          <div class="form">
+            <h2>Register</h2>
+            <form class="register-form">
+              <input
+                type="text"
+                name="email"
+                id="register-email"
+                placeholder="email"
+              />
+              <input
+                type="password"
+                name="password"
+                id="register-password"
+                placeholder="password"
+              />
+              <input
+                type="password"
+                name="re-password"
+                id="repeat-password"
+                placeholder="repeat password"
+              />
+              <button type="submit">register</button>
+              <p class="message">Already registered? <a href="#">Login</a></p>
+            </form>
+          </div>
+        </section> -->
+
+        <!-- Login Page (Only for Guest users) -->
+        <!-- <section id="login">
+          <div class="form">
+            <h2>Login</h2>
+            <form class="login-form">
+              <input type="text" name="email" id="email" placeholder="email" />
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="password"
+              />
+              <button type="submit">login</button>
+              <p class="message">
+                Not registered? <a href="#">Create an account</a>
+              </p>
+            </form>
+          </div>
+        </section> -->
+
+        <!-- Create Page (Only for logged-in users) -->
+        <!-- <section id="create">
+          <div class="form">
+            <h2>Add tattoo</h2>
+            <form class="create-form">
+              <input
+                type="text"
+                name="type"
+                id="type"
+                placeholder="Tattoo Type"
+              />
+              <input
+                type="text"
+                name="image-url"
+                id="image-url"
+                placeholder="Image URL"
+              />
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Description"
+                rows="2"
+                cols="10"
+              ></textarea>
+              <select id="user-type" name="user-type">
+                <option value="" disabled selected>Select your role</option>
+                <option value="Tattoo Artist">Tattoo Artist</option>
+                <option value="Tattoo Enthusiast">Tattoo Enthusiast</option>
+                <option value="First Time in Tattoo">
+                  First Time in Tattoo
+                </option>
+                <option value="Tattoo Collector">Tattoo Collector</option>
+              </select>
+              <button type="submit">Add tattoo</button>
+            </form>
+          </div>
+        </section> -->
+        <!-- Edit Page (Only for logged-in users) -->
+        <!-- <section id="edit">
+          <div class="form">
+            <h2>Edit tattoo</h2>
+            <form class="edit-form">
+              <input
+                type="text"
+                name="type"
+                id="type"
+                placeholder="Tattoo Type"
+              />
+              <input
+                type="text"
+                name="image-url"
+                id="image-url"
+                placeholder="Image URL"
+              />
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Description"
+                rows="2"
+                cols="10"
+              ></textarea>
+              <select id="user-type" name="user-type">
+                <option value="" disabled selected>Select your role</option>
+                <option value="Tattoo Artist">Tattoo Artist</option>
+                <option value="Tattoo Enthusiast">Tattoo Enthusiast</option>
+                <option value="First Time in Tattoo">
+                  First Time in Tattoo
+                </option>
+                <option value="Tattoo Collector">Tattoo Collector</option>
+              </select>
+              <button type="submit">Edit</button>
+            </form>
+          </div>
+        </section> -->
+
+        <!-- Details page -->
+        <!-- <section id="details">
+          <div id="details-wrapper">
+            <img
+              id="details-img"
+              src="./images/japanese dragon.png"
+              alt="example1"
+            />
+            <div>
+              <div id="info-wrapper">
+                <p id="details-type">Japanese Dragon</p>
+                <div id="details-description">
+                  <p id="user-type">Tattoo Artist</p>
+                  <p id="description">
+                    A majestic Japanese dragon wrapped in swirling clouds and
+                    flames, symbolizing strength, wisdom, and protection.
+                  </p>
+                </div>
+                <h3>Like tattoo:<span id="like">0</span></h3>
+                <div id="action-buttons">
+                  <a href="#" id="edit-btn">Edit</a>
+                  <a href="#" id="delete-btn">Delete</a>
+
+                  <a href="#" id="like-btn">Like</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section> -->
+      </main>
+    </div>
+    <footer>
+      <p>Tattoo Masters/ Exam @ SoftUni</p>
+    </footer>
+  </body>
+</html>
