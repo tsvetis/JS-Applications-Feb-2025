@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Components</title>
+
+    <style>
+      h2 {
+        background-color: aquamarine;
+      }
+    </style>
+  </head>
+  <body>
+    <template id="my-template">
+      <article>
+        <h2><slot name="title">Title Test</slot></h2>
+        <button>Show More</button>
+        <div style="display: none">
+          <p><slot>Paragraph Content of the Article</slot></p>
+        </div>
+      </article>
+    </template>
+
+    <h2>Custom Component Demo</h2>
+    <button id="btn">Click Me</button>
+
+    <my-element info="false"
+      >Hello <span>Again</span>
+      <span slot="title">Title from component</span></my-element
+    >
+
+    <main></main>
+
+    <script type="module">
+      const main = document.querySelector("main");
+      const tmp = document.getElementById("my-template");
+
+      document.getElementById("btn").addEventListener("click", () => {
+        const myEl = document.createElement("my-element");
+        main.appendChild(myEl);
+      });
+
+      class MyComponent extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+        }
+
+        connectedCallback() {
+          this.shadowRoot.appendChild(tmp.content.cloneNode(true));
+
+          this.shadowRoot
+            .querySelector("button")
+            .addEventListener("click", () => {
+              if (this.getAttribute("info") === "false") {
+                this.setAttribute("info", true);
+              } else {
+                this.setAttribute("info", false);
+              }
+            });
+        }
+
+        disconnectedCallback() {
+          console.log("Disconnected");
+        }
+
+        attributeChangedCallback(name, old, value) {
+          const div = this.shadowRoot.querySelector("div");
+          if (div) {
+            div.style.display = value === "true" ? "block" : "none";
+          }
+        }
+
+        static get observedAttributes() {
+          return ["info"];
+        }
+
+        show() {
+          this.setAttribute("info", true);
+        }
+
+        hide() {
+          this.setAttribute("info", false);
+        }
+      }
+
+      window.customElements.define("my-element", MyComponent);
+    </script>
+  </body>
+</html>
